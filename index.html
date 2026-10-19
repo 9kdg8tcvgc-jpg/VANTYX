@@ -1,558 +1,129 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VANTYX | Enter Your World</title>
-
+<title>VANTYX</title>
 <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: Arial, sans-serif;
-  background: #080b14;
-  color: #f4f7ff;
-  min-height: 100vh;
-}
-
-header {
-  height: 76px;
-  padding: 0 7%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #243246;
-  background: #090e19;
-}
-
-.logo {
-  direction: ltr;
-  color: #65e6ff;
-  font-size: 27px;
-  font-weight: 900;
-  letter-spacing: 5px;
-}
-
-.nav {
-  display: flex;
-  gap: 22px;
-  align-items: center;
-}
-
-.nav button {
-  background: none;
-  border: none;
-  color: #aab7ca;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.nav button:hover {
-  color: #65e6ff;
-}
-
-main {
-  max-width: 1100px;
-  margin: auto;
-  padding: 55px 22px;
-}
-
-.page {
-  display: none;
-  animation: appear .35s ease;
-}
-
-.page.active {
-  display: block;
-}
-
-@keyframes appear {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.hero {
-  text-align: center;
-  padding: 30px 0 42px;
-}
-
-.tag {
-  display: inline-block;
-  padding: 9px 15px;
-  border: 1px solid #286078;
-  border-radius: 30px;
-  color: #65e6ff;
-  font-size: 11px;
-  letter-spacing: 2px;
-  margin-bottom: 24px;
-}
-
-h1 {
-  direction: ltr;
-  font-size: clamp(48px, 9vw, 82px);
-  letter-spacing: 9px;
-  text-shadow: 0 0 35px #218dbb55;
-}
-
-.subtitle {
-  color: #65e6ff;
-  margin-top: 14px;
-  font-size: 20px;
-}
-
-.description {
-  max-width: 500px;
-  margin: 17px auto 25px;
-  color: #aab7ca;
-  line-height: 1.9;
-  font-size: 14px;
-}
-
-.primary, .secondary {
-  padding: 14px 25px;
-  border-radius: 7px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: .2s;
-}
-
-.primary {
-  background: #65e6ff;
-  color: #07111b;
-  border: 1px solid #65e6ff;
-}
-
-.primary:hover {
-  background: white;
-}
-
-.secondary {
-  background: transparent;
-  color: #65e6ff;
-  border: 1px solid #286078;
-}
-
-.secondary:hover {
-  background: #122333;
-}
-
-.section-title {
-  font-size: 25px;
-  margin-bottom: 10px;
-}
-
-.section-desc {
-  color: #94a5bc;
-  line-height: 1.8;
-  margin-bottom: 25px;
-  font-size: 14px;
-}
-
-.panel {
-  max-width: 440px;
-  margin: 10px auto;
-  padding: 30px;
-  border: 1px solid #24374c;
-  border-radius: 15px;
-  background: linear-gradient(145deg, #121c2b, #0b101b);
-}
-
-.panel h2 {
-  margin-bottom: 10px;
-}
-
-.panel p {
-  color: #94a5bc;
-  font-size: 13px;
-  line-height: 1.8;
-  margin-bottom: 22px;
-}
-
-label {
-  display: block;
-  font-size: 13px;
-  margin-bottom: 8px;
-  color: #dce7f6;
-}
-
-input {
-  width: 100%;
-  margin-bottom: 18px;
-  padding: 13px;
-  border-radius: 7px;
-  border: 1px solid #2c4057;
-  background: #080e18;
-  color: white;
-  outline: none;
-}
-
-input:focus {
-  border-color: #65e6ff;
-}
-
-.panel .primary {
-  width: 100%;
-}
-
-.small-link {
-  display: block;
-  text-align: center;
-  margin-top: 20px;
-  color: #65e6ff;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.characters {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-  margin: 25px 0;
-}
-
-.character {
-  text-align: center;
-  padding: 24px 12px;
-  background: #101827;
-  border: 1px solid #29384c;
-  border-radius: 13px;
-  cursor: pointer;
-  color: white;
-  transition: .2s;
-}
-
-.character:hover, .character.selected {
-  border-color: #65e6ff;
-  background: #122536;
-  transform: translateY(-3px);
-}
-
-.avatar {
-  width: 85px;
-  height: 85px;
-  border-radius: 50%;
-  margin: 0 auto 18px;
-  display: grid;
-  place-items: center;
-  font-size: 36px;
-  background: radial-gradient(circle, #24627c, #142039 72%);
-  border: 1px solid #65e6ff66;
-}
-
-.character h3 {
-  margin-bottom: 9px;
-  font-size: 16px;
-}
-
-.character p {
-  color: #94a5bc;
-  font-size: 12px;
-  line-height: 1.8;
-}
-
-.center {
-  text-align: center;
-}
-
-.features {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin-top: 40px;
-}
-
-.feature {
-  background: #101827;
-  border: 1px solid #243246;
-  border-radius: 10px;
-  padding: 22px;
-}
-
-.feature h3 {
-  color: #65e6ff;
-  margin-bottom: 10px;
-  font-size: 15px;
-}
-
-.feature p {
-  color: #94a5bc;
-  font-size: 13px;
-  line-height: 1.8;
-}
-
-.notice {
-  margin-top: 18px;
-  color: #65e6ff;
-  font-size: 13px;
-  line-height: 1.8;
-}
-
-footer {
-  text-align: center;
-  padding: 25px;
-  border-top: 1px solid #243246;
-  color: #687990;
-  font-size: 12px;
-}
-
-@media(max-width: 650px) {
-  header {
-    padding: 0 18px;
-  }
-
-  .logo {
-    font-size: 21px;
-    letter-spacing: 3px;
-  }
-
-  .nav {
-    gap: 12px;
-  }
-
-  .nav button {
-    font-size: 12px;
-  }
-
-  .characters, .features {
-    grid-template-columns: 1fr;
-  }
-
-  .panel {
-    padding: 23px;
-  }
-}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#080b14;color:#f5f7ff}
+header{padding:22px 8%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #242a3a}
+.logo{font-size:27px;font-weight:900;letter-spacing:3px;color:#8c7bff}
+nav{display:flex;gap:10px;flex-wrap:wrap}
+button{cursor:pointer;border:1px solid #7162e8;background:#7162e8;color:white;padding:12px 18px;border-radius:9px;font-weight:bold}
+button.secondary{background:transparent;border-color:#343a50}
+main{max-width:900px;margin:65px auto;padding:20px;text-align:center}
+h1{font-size:clamp(42px,8vw,76px);margin:15px 0;color:#a99cff}
+p{color:#b7bfd2;line-height:1.8}
+.panel{max-width:480px;margin:25px auto;padding:28px;background:#111725;border:1px solid #293149;border-radius:18px}
+input{width:100%;padding:14px;margin:8px 0 15px;background:#080d18;border:1px solid #343d55;border-radius:8px;color:white}
+label{display:block;text-align:right;color:#cbd2e4}
+.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:25px 0}
+.choice{padding:22px 10px;background:#151b2b;border:1px solid #343d55;border-radius:13px;cursor:pointer}
+.choice.selected{border:2px solid #a99cff;background:#25203f}
+.small{font-size:13px;color:#929bb2}
+.hidden{display:none}
 </style>
 </head>
-
 <body>
-
 <header>
-  <div class="logo">VANTYX</div>
-  <nav class="nav">
-    <button onclick="showPage('home')">الرئيسية</button>
-    <button onclick="showPage('login')">تسجيل الدخول</button>
-    <button onclick="showPage('register')">إنشاء حساب</button>
-  </nav>
+<div class="logo">VANTYX</div>
+<nav>
+<button class="secondary" onclick="showPage('home')">الرئيسية</button>
+<button class="secondary" onclick="showPage('login')">تسجيل الدخول</button>
+<button onclick="showPage('register')">إنشاء حساب</button>
+</nav>
 </header>
 
 <main>
+<section id="home">
+<p>عالمك يبدأ من هنا</p>
+<h1>WELCOME TO VANTYX</h1>
+<p>اصنع هويتك، اختر طريقك، وابدأ مغامرتك في عالم جديد.</p>
+<button onclick="showPage('register')">ابدأ رحلتك</button>
+</section>
 
-  <section id="home" class="page active">
-    <div class="hero">
-      <div class="tag">YOUR WORLD. YOUR RULES.</div>
-      <h1>VANTYX</h1>
-      <div class="subtitle">عالمك. اختياراتك. قصتك.</div>
-      <p class="description">
-        ادخل مدينة مليئة بالفرص، واكتشف المهن والمهمات،
-        واصنع شخصيتك واختر الطريق الذي يناسبك.
-        مغامرتك تبدأ من هنا.
-      </p>
-      <button class="primary" onclick="showPage('register')">
-        ابدأ رحلتك
-      </button>
-      <button class="secondary" onclick="showPage('login')">
-        لدي حساب
-      </button>
-    </div>
+<section id="login" class="hidden">
+<div class="panel">
+<h2>تسجيل الدخول</h2>
+<p>أهلًا بعودتك إلى VANTYX</p>
+<form onsubmit="demoLogin(event)">
+<label>البريد الإلكتروني</label>
+<input type="email" placeholder="name@example.com" required>
+<label>كلمة المرور</label>
+<input type="password" placeholder="كلمة المرور" required>
+<button type="submit">دخول</button>
+</form>
+<p>ما عندك حساب؟ <a href="#" onclick="showPage('register')" style="color:#a99cff">أنشئ حسابًا</a></p>
+</div>
+</section>
 
-    <div class="features">
-      <article class="feature">
-        <h3>مدينة مفتوحة</h3>
-        <p>استكشف أماكن جديدة واكتشف ما تخفيه المدينة.</p>
-      </article>
-      <article class="feature">
-        <h3>مهن ومهمات</h3>
-        <p>اختر مسارك المهني وواجه تحديات مختلفة.</p>
-      </article>
-      <article class="feature">
-        <h3>شخصيتك الخاصة</h3>
-        <p>ابدأ رحلتك بشخصية تختارها بنفسك.</p>
-      </article>
-    </div>
-  </section>
+<section id="register" class="hidden">
+<div class="panel">
+<h2>CREATE YOUR IDENTITY</h2>
+<p>أنشئ هويتك في عالم VANTYX</p>
+<form onsubmit="demoRegister(event)">
+<label>اسم اللاعب</label>
+<input id="playerName" type="text" placeholder="اختر اسمك" required maxlength="20">
+<label>البريد الإلكتروني</label>
+<input type="email" placeholder="name@example.com" required>
+<label>كلمة المرور التجريبية</label>
+<input type="password" placeholder="اختر كلمة مرور" required minlength="6">
+<button type="submit">متابعة</button>
+</form>
+<p class="small">هذه واجهة تجريبية فقط. لا تستخدمي كلمة مرورك الحقيقية.</p>
+</div>
+</section>
 
-  <section id="login" class="page">
-    <div class="panel">
-      <h2>مرحبًا بعودتك</h2>
-      <p>سجّل الدخول للعودة إلى عالم VANTYX.</p>
-      <form onsubmit="demoLogin(event)">
-        <label for="login-email">البريد الإلكتروني</label>
-        <input id="login-email" type="email"
-          placeholder="name@example.com" required>
+<section id="characters" class="hidden">
+<h1 style="font-size:38px">اختر شخصيتك</h1>
+<p>كل رحلة تبدأ بقرار.</p>
+<div class="choices">
+<div class="choice" onclick="selectCharacter(this,'المستكشف')"><h3>المستكشف</h3><p>اكتشف العالم</p></div>
+<div class="choice" onclick="selectCharacter(this,'المحترف')"><h3>المحترف</h3><p>خطط وتقدم</p></div>
+<div class="choice" onclick="selectCharacter(this,'المغامر')"><h3>المغامر</h3><p>جرّب طريقًا جديدًا</p></div>
+</div>
+<button onclick="finishCharacter()">تأكيد الشخصية</button>
+<p id="characterMessage"></p>
+</section>
 
-        <label for="login-password">كلمة المرور</label>
-        <input id="login-password" type="password"
-          placeholder="كلمة المرور" required>
-
-        <button class="primary" type="submit">تسجيل الدخول</button>
-      </form>
-      <button class="small-link"
-        onclick="showPage('register')">
-        ليس لديك حساب؟ أنشئ حسابًا
-      </button>
-      <div id="login-message" class="notice"></div>
-    </div>
-  </section>
-
-  <section id="register" class="page">
-    <div class="panel">
-      <h2>أنشئ هويتك</h2>
-      <p>ابدأ بتجهيز حسابك في عالم VANTYX.</p>
-      <form onsubmit="demoRegister(event)">
-        <label for="new-name">اسم اللاعب</label>
-        <input id="new-name" type="text"
-          placeholder="اختر اسمًا للعب" maxlength="20" required>
-
-        <label for="new-email">البريد الإلكتروني</label>
-        <input id="new-email" type="email"
-          placeholder="name@example.com" required>
-
-        <label for="new-password">كلمة المرور</label>
-        <input id="new-password" type="password"
-          placeholder="أنشئ كلمة مرور" minlength="8" required>
-
-        <button class="primary" type="submit">متابعة</button>
-      </form>
-      <button class="small-link"
-        onclick="showPage('login')">
-        لديك حساب بالفعل؟ سجّل الدخول
-      </button>
-      <div id="register-message" class="notice"></div>
-    </div>
-  </section>
-
-  <section id="characters" class="page">
-    <div class="center">
-      <div class="tag">CREATE YOUR IDENTITY</div>
-      <h2 class="section-title">اختر شخصيتك</h2>
-      <p class="section-desc">
-        اختر الشخصية التي تريد أن تبدأ بها رحلتك.
-      </p>
-    </div>
-
-    <div class="characters">
-      <button class="character selected"
-        onclick="selectCharacter(this, 'المستكشف')">
-        <div class="avatar">✦</div>
-        <h3>المستكشف</h3>
-        <p>اكتشف المدينة<br>وابحث عن الفرص.</p>
-      </button>
-
-      <button class="character"
-        onclick="selectCharacter(this, 'المحترف')">
-        <div class="avatar">⬡</div>
-        <h3>المحترف</h3>
-        <p>ابدأ مسيرتك المهنية<br>وابنِ مستقبلك.</p>
-      </button>
-
-      <button class="character"
-        onclick="selectCharacter(this, 'المغامر')">
-        <div class="avatar">◇</div>
-        <h3>المغامر</h3>
-        <p>واجه التحديات<br>واصنع قصتك.</p>
-      </button>
-    </div>
-
-    <div class="center">
-      <button class="primary" onclick="confirmCharacter()">
-        تأكيد الشخصية
-      </button>
-      <div id="character-message" class="notice"></div>
-    </div>
-  </section>
-
-  <section id="welcome" class="page">
-    <div class="hero">
-      <div class="tag">IDENTITY CONFIRMED</div>
-      <h1>VANTYX</h1>
-      <div class="subtitle">أهلًا بك في عالمك الجديد</div>
-      <p id="welcome-message" class="description"></p>
-      <button class="primary" onclick="showPage('home')">
-        العودة للرئيسية
-      </button>
-      <p class="notice">
-        عالم اللعبة قيد التطوير. ستبدأ المغامرة عندما نضيف المدينة
-        والمهام القابلة للعب.
-      </p>
-    </div>
-  </section>
-
+<section id="welcome" class="hidden">
+<h1 style="font-size:48px">أهلًا بك في VANTYX</h1>
+<p id="welcomeMessage"></p>
+<p>هذه بداية عالمك. سنضيف المراحل والمهام واللعب ثلاثي الأبعاد بالتدريج.</p>
+<button onclick="showPage('home')">العودة للرئيسية</button>
+</section>
 </main>
 
-<footer>
-  VANTYX © 2026 · مشروع مستقل قيد التطوير
-</footer>
-
 <script>
-let selectedCharacter = "المستكشف";
-let playerName = "";
-
-function showPage(pageId) {
-  document.querySelectorAll(".page").forEach(function(page) {
-    page.classList.remove("active");
-  });
-
-  document.getElementById(pageId).classList.add("active");
-  window.scrollTo(0, 0);
+let playerName='';
+let chosenCharacter='';
+function showPage(page){
+document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));
+document.getElementById(page).classList.remove('hidden');
+window.scrollTo(0,0);
 }
-
-function demoRegister(event) {
-  event.preventDefault();
-
-  playerName = document.getElementById("new-name").value.trim();
-
-  document.getElementById("register-message").textContent =
-    "هذه واجهة تجريبية فقط. انتقلي لاختيار الشخصية لمتابعة العرض.";
-
-  showPage("characters");
+function demoRegister(event){
+event.preventDefault();
+playerName=document.getElementById('playerName').value.trim();
+showPage('characters');
 }
-
-function demoLogin(event) {
-  event.preventDefault();
-
-  document.getElementById("login-message").textContent =
-    "تسجيل الدخول الحقيقي لم يُفعّل بعد. يمكنك تجربة واجهة إنشاء الحساب.";
-
-  setTimeout(function() {
-    showPage("register");
-  }, 1200);
+function demoLogin(event){
+event.preventDefault();
+alert('تسجيل الدخول غير مفعّل بعد. هذه نسخة تجريبية للواجهة.');
+showPage('register');
 }
-
-function selectCharacter(button, name) {
-  selectedCharacter = name;
-
-  document.querySelectorAll(".character").forEach(function(card) {
-    card.classList.remove("selected");
-  });
-
-  button.classList.add("selected");
-
-  document.getElementById("character-message").textContent =
-    "الشخصية المختارة: " + selectedCharacter;
+function selectCharacter(element,name){
+document.querySelectorAll('.choice').forEach(c=>c.classList.remove('selected'));
+element.classList.add('selected');
+chosenCharacter=name;
+document.getElementById('characterMessage').textContent='شخصيتك المختارة: '+name;
 }
-
-function confirmCharacter() {
-  document.getElementById("welcome-message").textContent =
-    (playerName ? "أهلًا " + playerName + "، " : "أهلًا بك، ") +
-    "اخترت شخصية " + selectedCharacter +
-    ". هذه بداية رحلتك في VANTYX.";
-
-  showPage("welcome");
+function finishCharacter(){
+if(!chosenCharacter){alert('اختاري شخصية أولًا');return;}
+document.getElementById('welcomeMessage').textContent='مرحبًا '+(playerName||'أيها اللاعب')+'! اخترت شخصية '+chosenCharacter+'.';
+showPage('welcome');
 }
 </script>
-
-</body>
-</html>
-
-  <footer>
-    VANTYX © 2026 · مشروع قيد التطوير
-  </footer>
 </body>
 </html>
