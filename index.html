@@ -1,129 +1,232 @@
+
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VANTYX</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#080b14;color:#f5f7ff}
-header{padding:22px 8%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #242a3a}
-.logo{font-size:27px;font-weight:900;letter-spacing:3px;color:#8c7bff}
-nav{display:flex;gap:10px;flex-wrap:wrap}
-button{cursor:pointer;border:1px solid #7162e8;background:#7162e8;color:white;padding:12px 18px;border-radius:9px;font-weight:bold}
-button.secondary{background:transparent;border-color:#343a50}
-main{max-width:900px;margin:65px auto;padding:20px;text-align:center}
-h1{font-size:clamp(42px,8vw,76px);margin:15px 0;color:#a99cff}
-p{color:#b7bfd2;line-height:1.8}
-.panel{max-width:480px;margin:25px auto;padding:28px;background:#111725;border:1px solid #293149;border-radius:18px}
-input{width:100%;padding:14px;margin:8px 0 15px;background:#080d18;border:1px solid #343d55;border-radius:8px;color:white}
-label{display:block;text-align:right;color:#cbd2e4}
-.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:25px 0}
-.choice{padding:22px 10px;background:#151b2b;border:1px solid #343d55;border-radius:13px;cursor:pointer}
-.choice.selected{border:2px solid #a99cff;background:#25203f}
-.small{font-size:13px;color:#929bb2}
-.hidden{display:none}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VANTYX | Open World</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #080b12;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    header {
+      padding: 18px;
+      background: #101624;
+      border-bottom: 1px solid #26364e;
+    }
+    h1 { color: #62d9ff; letter-spacing: 5px; }
+    #game {
+      display: block;
+      width: 100%;
+      height: 65vh;
+      min-height: 360px;
+      background: #b9d9e8;
+    }
+    .controls { padding: 15px; }
+    button {
+      background: #13283b;
+      color: white;
+      border: 1px solid #62d9ff;
+      border-radius: 9px;
+      padding: 12px 16px;
+      margin: 5px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    button:hover { background: #20506b; }
+    #status { color: #a8cde0; }
+  </style>
 </head>
 <body>
-<header>
-<div class="logo">VANTYX</div>
-<nav>
-<button class="secondary" onclick="showPage('home')">الرئيسية</button>
-<button class="secondary" onclick="showPage('login')">تسجيل الدخول</button>
-<button onclick="showPage('register')">إنشاء حساب</button>
-</nav>
-</header>
+  <header>
+    <h1>VANTYX</h1>
+    <p>YOUR WORLD. YOUR STORY.</p>
+  </header>
 
-<main>
-<section id="home">
-<p>عالمك يبدأ من هنا</p>
-<h1>WELCOME TO VANTYX</h1>
-<p>اصنع هويتك، اختر طريقك، وابدأ مغامرتك في عالم جديد.</p>
-<button onclick="showPage('register')">ابدأ رحلتك</button>
-</section>
+  <canvas id="game"></canvas>
 
-<section id="login" class="hidden">
-<div class="panel">
-<h2>تسجيل الدخول</h2>
-<p>أهلًا بعودتك إلى VANTYX</p>
-<form onsubmit="demoLogin(event)">
-<label>البريد الإلكتروني</label>
-<input type="email" placeholder="name@example.com" required>
-<label>كلمة المرور</label>
-<input type="password" placeholder="كلمة المرور" required>
-<button type="submit">دخول</button>
-</form>
-<p>ما عندك حساب؟ <a href="#" onclick="showPage('register')" style="color:#a99cff">أنشئ حسابًا</a></p>
-</div>
-</section>
+  <div class="controls">
+    <button id="viewButton">تغيير منظور الكاميرا</button>
+    <p>الحركة: W A S D أو أسهم لوحة المفاتيح</p>
+    <p id="status">جارٍ تحميل العالم...</p>
+  </div>
 
-<section id="register" class="hidden">
-<div class="panel">
-<h2>CREATE YOUR IDENTITY</h2>
-<p>أنشئ هويتك في عالم VANTYX</p>
-<form onsubmit="demoRegister(event)">
-<label>اسم اللاعب</label>
-<input id="playerName" type="text" placeholder="اختر اسمك" required maxlength="20">
-<label>البريد الإلكتروني</label>
-<input type="email" placeholder="name@example.com" required>
-<label>كلمة المرور التجريبية</label>
-<input type="password" placeholder="اختر كلمة مرور" required minlength="6">
-<button type="submit">متابعة</button>
-</form>
-<p class="small">هذه واجهة تجريبية فقط. لا تستخدمي كلمة مرورك الحقيقية.</p>
-</div>
-</section>
+  <script type="module">
+    import * as THREE from
+      'https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js';
 
-<section id="characters" class="hidden">
-<h1 style="font-size:38px">اختر شخصيتك</h1>
-<p>كل رحلة تبدأ بقرار.</p>
-<div class="choices">
-<div class="choice" onclick="selectCharacter(this,'المستكشف')"><h3>المستكشف</h3><p>اكتشف العالم</p></div>
-<div class="choice" onclick="selectCharacter(this,'المحترف')"><h3>المحترف</h3><p>خطط وتقدم</p></div>
-<div class="choice" onclick="selectCharacter(this,'المغامر')"><h3>المغامر</h3><p>جرّب طريقًا جديدًا</p></div>
-</div>
-<button onclick="finishCharacter()">تأكيد الشخصية</button>
-<p id="characterMessage"></p>
-</section>
+    const canvas = document.querySelector('#game');
+    const status = document.querySelector('#status');
 
-<section id="welcome" class="hidden">
-<h1 style="font-size:48px">أهلًا بك في VANTYX</h1>
-<p id="welcomeMessage"></p>
-<p>هذه بداية عالمك. سنضيف المراحل والمهام واللعب ثلاثي الأبعاد بالتدريج.</p>
-<button onclick="showPage('home')">العودة للرئيسية</button>
-</section>
-</main>
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xb9d9e8);
+    scene.fog = new THREE.Fog(0xb9d9e8, 20, 90);
 
-<script>
-let playerName='';
-let chosenCharacter='';
-function showPage(page){
-document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));
-document.getElementById(page).classList.remove('hidden');
-window.scrollTo(0,0);
-}
-function demoRegister(event){
-event.preventDefault();
-playerName=document.getElementById('playerName').value.trim();
-showPage('characters');
-}
-function demoLogin(event){
-event.preventDefault();
-alert('تسجيل الدخول غير مفعّل بعد. هذه نسخة تجريبية للواجهة.');
-showPage('register');
-}
-function selectCharacter(element,name){
-document.querySelectorAll('.choice').forEach(c=>c.classList.remove('selected'));
-element.classList.add('selected');
-chosenCharacter=name;
-document.getElementById('characterMessage').textContent='شخصيتك المختارة: '+name;
-}
-function finishCharacter(){
-if(!chosenCharacter){alert('اختاري شخصية أولًا');return;}
-document.getElementById('welcomeMessage').textContent='مرحبًا '+(playerName||'أيها اللاعب')+'! اخترت شخصية '+chosenCharacter+'.';
-showPage('welcome');
-}
-</script>
+    const camera = new THREE.PerspectiveCamera(70, 1, 0.1, 200);
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x526b55, 2));
+
+    const sun = new THREE.DirectionalLight(0xffffff, 2);
+    sun.position.set(10, 20, 10);
+    sun.castShadow = true;
+    scene.add(sun);
+
+    const ground = new THREE.Mesh(
+      new THREE.PlaneGeometry(200, 200),
+      new THREE.MeshStandardMaterial({ color: 0x55945a })
+    );
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = -0.05;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    const grid = new THREE.GridHelper(200, 80, 0x315f43, 0x47784d);
+    grid.position.y = 0.01;
+    scene.add(grid);
+
+    const player = new THREE.Group();
+
+    const body = new THREE.Mesh(
+      new THREE.BoxGeometry(0.8, 1.2, 0.5),
+      new THREE.MeshStandardMaterial({ color: 0x19bfff })
+    );
+    body.position.y = 1.1;
+    body.castShadow = true;
+    player.add(body);
+
+    const head = new THREE.Mesh(
+      new THREE.SphereGeometry(0.35, 20, 16),
+      new THREE.MeshStandardMaterial({ color: 0xffd0a0 })
+    );
+    head.position.y = 1.95;
+    head.castShadow = true;
+    player.add(head);
+
+    scene.add(player);
+
+    const buildings = [];
+    for (let i = 0; i < 24; i++) {
+      const height = 2 + Math.random() * 7;
+      const building = new THREE.Mesh(
+        new THREE.BoxGeometry(2.5, height, 2.5),
+        new THREE.MeshStandardMaterial({
+          color: [0x53677d, 0x7c8795, 0x3c566d][i % 3]
+        })
+      );
+
+      const angle = i * 2.399;
+      const distance = 9 + Math.sqrt(i) * 5;
+      building.position.set(
+        Math.cos(angle) * distance,
+        height / 2,
+        Math.sin(angle) * distance
+      );
+      building.castShadow = true;
+      building.receiveShadow = true;
+      scene.add(building);
+      buildings.push(building);
+    }
+
+    const keys = {};
+    let firstPerson = false;
+    let yaw = 0;
+
+    window.addEventListener('keydown', event => {
+      keys[event.key.toLowerCase()] = true;
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ']
+        .includes(event.key)) event.preventDefault();
+    });
+
+    window.addEventListener('keyup', event => {
+      keys[event.key.toLowerCase()] = false;
+    });
+
+    document.querySelector('#viewButton').addEventListener('click', () => {
+      firstPerson = !firstPerson;
+      status.textContent = firstPerson
+        ? 'منظور الشخص الأول'
+        : 'منظور خلف الشخصية';
+    });
+
+    function resize() {
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    status.textContent = 'العالم جاهز! تحرك باستخدام WASD.';
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      let forward = 0;
+      let sideways = 0;
+
+      if (keys['w'] || keys['arrowup']) forward += 1;
+      if (keys['s'] || keys['arrowdown']) forward -= 1;
+      if (keys['d'] || keys['arrowright']) sideways += 1;
+      if (keys['a'] || keys['arrowleft']) sideways -= 1;
+
+      if (forward !== 0 || sideways !== 0) {
+        const length = Math.hypot(forward, sideways);
+        forward /= length;
+        sideways /= length;
+
+        const speed = 0.12;
+        const dx = sideways * Math.cos(yaw) -
+                   forward * Math.sin(yaw);
+        const dz = sideways * Math.sin(yaw) +
+                   forward * Math.cos(yaw);
+
+        player.position.x += dx * speed;
+        player.position.z += dz * speed;
+
+        yaw = Math.atan2(-dx, -dz);
+        player.rotation.y = yaw;
+      }
+
+      if (firstPerson) {
+        camera.position.set(
+          player.position.x,
+          player.position.y + 1.8,
+          player.position.z
+        );
+        camera.rotation.set(0, yaw + Math.PI, 0);
+      } else {
+        const distance = 7;
+        camera.position.set(
+          player.position.x + Math.sin(yaw) * distance,
+          player.position.y + 4,
+          player.position.z + Math.cos(yaw) * distance
+        );
+        camera.lookAt(
+          player.position.x,
+          player.position.y + 1,
+          player.position.z
+        );
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  </script>
 </body>
 </html>
