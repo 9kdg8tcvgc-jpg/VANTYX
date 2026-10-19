@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VANTYX | ادخل عالمك</title>
+  <meta name="description" content="VANTYX - عالم مفتوح من صنعك، حيث تبدأ قصتك وتختار مهنتك.">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: #f4f7ff;
+      background:
+        radial-gradient(ellipse at 80% 15%, #123e59 0%, transparent 38%),
+        radial-gradient(ellipse at 10% 90%, #20204b 0%, transparent 40%),
+        #080b14;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 25px 8%;
+      border-bottom: 1px solid #243246;
+    }
+
+    .logo {
+      direction: ltr;
+      font-size: 29px;
+      font-weight: 900;
+      letter-spacing: 5px;
+      color: #65e6ff;
+    }
+
+    .status {
+      color: #8c9bb3;
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    main {
+      min-height: 75vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 22px;
+    }
+
+    .hero {
+      max-width: 780px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 9px 16px;
+      border: 1px solid #286078;
+      border-radius: 30px;
+      color: #65e6ff;
+      font-size: 12px;
+      letter-spacing: 2px;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      direction: ltr;
+      font-size: clamp(48px, 10vw, 100px);
+      line-height: 1.1;
+      letter-spacing: 8px;
+      color: white;
+      text-shadow: 0 0 45px #218dbb66;
+    }
+
+    .subtitle {
+      margin-top: 22px;
+      color: #65e6ff;
+      font-size: 21px;
+    }
+
+    .description {
+      max-width: 550px;
+      margin: 18px auto 32px;
+      line-height: 2;
+      color: #aab7ca;
+      font-size: 15px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 15px 35px;
+      border-radius: 8px;
+      background: #65e6ff;
+      color: #07111b;
+      font-weight: bold;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .button:hover {
+      background: white;
+      transform: translateY(-2px);
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 55px;
+      text-align: right;
+    }
+
+    .feature {
+      padding: 22px;
+      border: 1px solid #25374b;
+      border-radius: 12px;
+      background: #111827aa;
+    }
+
+    .feature h2 {
+      color: #65e6ff;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .feature p {
+      color: #9caac0;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      border-top: 1px solid #243246;
+      color: #687990;
+      font-size: 12px;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 20px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .status {
+        font-size: 9px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">VANTYX</div>
+    <div class="status">YOUR WORLD. YOUR RULES.</div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="tag">A NEW WORLD IS TAKING SHAPE</div>
+
+      <h1>VANTYX</h1>
+
+      <p class="subtitle">عالمك. اختياراتك. قصتك.</p>
+
+      <p class="description">
+        مدينة واسعة تنتظرك لاكتشافها.
+        اختر مهنتك، أنجز المهمات، واتخذ قراراتك.
+        هنا، أنت من يحدد طريقه.
+      </p>
+
+      <a class="button" href="#world">اكتشف عالم VANTYX</a>
+
+      <div class="features" id="world">
+        <article class="feature">
+          <h2>عالم مفتوح</h2>
+          <p>مدينة مليئة بالأماكن والأسرار التي سنبنيها معًا.</p>
+        </article>
+
+        <article class="feature">
+          <h2>مهن متعددة</h2>
+          <p>اكتشف مسارات مهنية ومهمات مختلفة داخل المدينة.</p>
+        </article>
+
+        <article class="feature">
+          <h2>قصتك أنت</h2>
+          <p>قراراتك ستصبح جزءًا من تجربتك داخل العالم.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    VANTYX © 2026 · مشروع قيد التطوير
+  </footer>
+</body>
+</html>
