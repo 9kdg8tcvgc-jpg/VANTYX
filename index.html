@@ -2,231 +2,196 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VANTYX | Open World</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: #080b12;
-      color: white;
-      font-family: Arial, sans-serif;
-      text-align: center;
-    }
-    header {
-      padding: 18px;
-      background: #101624;
-      border-bottom: 1px solid #26364e;
-    }
-    h1 { color: #62d9ff; letter-spacing: 5px; }
-    #game {
-      display: block;
-      width: 100%;
-      height: 65vh;
-      min-height: 360px;
-      background: #b9d9e8;
-    }
-    .controls { padding: 15px; }
-    button {
-      background: #13283b;
-      color: white;
-      border: 1px solid #62d9ff;
-      border-radius: 9px;
-      padding: 12px 16px;
-      margin: 5px;
-      cursor: pointer;
-      font-size: 15px;
-    }
-    button:hover { background: #20506b; }
-    #status { color: #a8cde0; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VANTYX | Open World</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080b12;color:white;font-family:Arial,sans-serif;text-align:center}
+header{padding:12px;background:#101624;border-bottom:1px solid #26364e}
+h1{color:#62d9ff;letter-spacing:5px;margin:8px}
+#game{display:block;width:100%;height:65vh;min-height:360px;background:#b9d9e8}
+.controls{padding:12px}
+button{background:#13283b;color:white;border:1px solid #62d9ff;border-radius:9px;padding:12px 16px;margin:5px;cursor:pointer;font-size:15px}
+button:hover{background:#20506b}
+#status{color:#a8cde0}
+</style>
 </head>
 <body>
-  <header>
-    <h1>VANTYX</h1>
-    <p>YOUR WORLD. YOUR STORY.</p>
-  </header>
+<header>
+<h1>VANTYX</h1>
+<p>YOUR WORLD. YOUR STORY.</p>
+</header>
+<canvas id="game"></canvas>
+<div class="controls">
+<button id="viewButton">تغيير منظور الكاميرا</button>
+<p>الحركة: W A S D أو أسهم لوحة المفاتيح</p>
+<p id="status">جارٍ تحميل العالم...</p>
+</div>
 
-  <canvas id="game"></canvas>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js';
 
-  <div class="controls">
-    <button id="viewButton">تغيير منظور الكاميرا</button>
-    <p>الحركة: W A S D أو أسهم لوحة المفاتيح</p>
-    <p id="status">جارٍ تحميل العالم...</p>
-  </div>
+const canvas=document.querySelector('#game');
+const status=document.querySelector('#status');
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0xb9d9e8);
+scene.fog=new THREE.Fog(0xb9d9e8,20,90);
 
-  <script type="module">
-    import * as THREE from
-      'https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js';
+const camera=new THREE.PerspectiveCamera(70,1,0.1,200);
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.shadowMap.enabled=true;
 
-    const canvas = document.querySelector('#game');
-    const status = document.querySelector('#status');
+scene.add(new THREE.HemisphereLight(0xffffff,0x526b55,2));
+const sun=new THREE.DirectionalLight(0xffffff,2);
+sun.position.set(10,20,10);
+sun.castShadow=true;
+scene.add(sun);
 
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xb9d9e8);
-    scene.fog = new THREE.Fog(0xb9d9e8, 20, 90);
+const ground=new THREE.Mesh(
+new THREE.PlaneGeometry(200,200),
+new THREE.MeshStandardMaterial({color:0x55945a})
+);
+ground.rotation.x=-Math.PI/2;
+ground.position.y=-0.05;
+ground.receiveShadow=true;
+scene.add(ground);
 
-    const camera = new THREE.PerspectiveCamera(70, 1, 0.1, 200);
+const grid=new THREE.GridHelper(200,80,0x315f43,0x47784d);
+grid.position.y=0.01;
+scene.add(grid);
 
-    const renderer = new THREE.WebGLRenderer({
-      canvas,
-      antialias: true
-    });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
+const player=new THREE.Group();
+const body=new THREE.Mesh(
+new THREE.BoxGeometry(0.8,1.2,0.5),
+new THREE.MeshStandardMaterial({color:0x19bfff})
+);
+body.position.y=1.1;
+body.castShadow=true;
+player.add(body);
 
-    scene.add(new THREE.HemisphereLight(0xffffff, 0x526b55, 2));
+const head=new THREE.Mesh(
+new THREE.SphereGeometry(0.35,20,16),
+new THREE.MeshStandardMaterial({color:0xffd0a0})
+);
+head.position.y=1.95;
+head.castShadow=true;
+player.add(head);
+scene.add(player);
 
-    const sun = new THREE.DirectionalLight(0xffffff, 2);
-    sun.position.set(10, 20, 10);
-    sun.castShadow = true;
-    scene.add(sun);
+for(let i=0;i<24;i++){
+const height=2+Math.random()*7;
+const building=new THREE.Mesh(
+new THREE.BoxGeometry(2.5,height,2.5),
+new THREE.MeshStandardMaterial({
+color:[0x53677d,0x7c8795,0x3c566d][i%3]
+})
+);
+const angle=i*2.399;
+const distance=9+Math.sqrt(i)*5;
+building.position.set(
+Math.cos(angle)*distance,
+height/2,
+Math.sin(angle)*distance
+);
+building.castShadow=true;
+building.receiveShadow=true;
+scene.add(building);
+}
 
-    const ground = new THREE.Mesh(
-      new THREE.PlaneGeometry(200, 200),
-      new THREE.MeshStandardMaterial({ color: 0x55945a })
-    );
-    ground.rotation.x = -Math.PI / 2;
-    ground.position.y = -0.05;
-    ground.receiveShadow = true;
-    scene.add(ground);
+const keys={};
+let firstPerson=false;
+let yaw=0;
+const speed=7;
+const clock=new THREE.Clock();
 
-    const grid = new THREE.GridHelper(200, 80, 0x315f43, 0x47784d);
-    grid.position.y = 0.01;
-    scene.add(grid);
+window.addEventListener('keydown',event=>{
+const key=event.key.toLowerCase();
+if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(key))
+event.preventDefault();
+keys[key]=true;
+});
+window.addEventListener('keyup',event=>{
+keys[event.key.toLowerCase()]=false;
+});
+window.addEventListener('blur',()=> {
+for(const key in keys) keys[key]=false;
+});
 
-    const player = new THREE.Group();
+document.querySelector('#viewButton').addEventListener('click',()=>{
+firstPerson=!firstPerson;
+status.textContent=firstPerson?'منظور الشخص الأول':'منظور خلف الشخصية';
+});
 
-    const body = new THREE.Mesh(
-      new THREE.BoxGeometry(0.8, 1.2, 0.5),
-      new THREE.MeshStandardMaterial({ color: 0x19bfff })
-    );
-    body.position.y = 1.1;
-    body.castShadow = true;
-    player.add(body);
+function resize(){
+const width=canvas.clientWidth;
+const height=canvas.clientHeight;
+renderer.setSize(width,height,false);
+camera.aspect=width/height;
+camera.updateProjectionMatrix();
+}
+window.addEventListener('resize',resize);
+resize();
 
-    const head = new THREE.Mesh(
-      new THREE.SphereGeometry(0.35, 20, 16),
-      new THREE.MeshStandardMaterial({ color: 0xffd0a0 })
-    );
-    head.position.y = 1.95;
-    head.castShadow = true;
-    player.add(head);
+status.textContent='العالم جاهز! تحرك باستخدام WASD.';
 
-    scene.add(player);
+function animate(){
+requestAnimationFrame(animate);
+const delta=Math.min(clock.getDelta(),0.05);
 
-    const buildings = [];
-    for (let i = 0; i < 24; i++) {
-      const height = 2 + Math.random() * 7;
-      const building = new THREE.Mesh(
-        new THREE.BoxGeometry(2.5, height, 2.5),
-        new THREE.MeshStandardMaterial({
-          color: [0x53677d, 0x7c8795, 0x3c566d][i % 3]
-        })
-      );
+let forward=0;
+let sideways=0;
 
-      const angle = i * 2.399;
-      const distance = 9 + Math.sqrt(i) * 5;
-      building.position.set(
-        Math.cos(angle) * distance,
-        height / 2,
-        Math.sin(angle) * distance
-      );
-      building.castShadow = true;
-      building.receiveShadow = true;
-      scene.add(building);
-      buildings.push(building);
-    }
+if(keys['w']||keys['arrowup']) forward+=1;
+if(keys['s']||keys['arrowdown']) forward-=1;
+if(keys['d']||keys['arrowright']) sideways+=1;
+if(keys['a']||keys['arrowleft']) sideways-=1;
 
-    const keys = {};
-    let firstPerson = false;
-    let yaw = 0;
+if(forward!==0||sideways!==0){
+const length=Math.hypot(forward,sideways);
+forward/=length;
+sideways/=length;
 
-    window.addEventListener('keydown', event => {
-      keys[event.key.toLowerCase()] = true;
-      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ']
-        .includes(event.key)) event.preventDefault();
-    });
+// الحركة مرتبطة باتجاه الشخصية، وليس موقع الكاميرا.
+const dx=sideways*Math.cos(yaw)-forward*Math.sin(yaw);
+const dz=sideways*Math.sin(yaw)+forward*Math.cos(yaw);
 
-    window.addEventListener('keyup', event => {
-      keys[event.key.toLowerCase()] = false;
-    });
+player.position.x+=dx*speed*delta;
+player.position.z+=dz*speed*delta;
 
-    document.querySelector('#viewButton').addEventListener('click', () => {
-      firstPerson = !firstPerson;
-      status.textContent = firstPerson
-        ? 'منظور الشخص الأول'
-        : 'منظور خلف الشخصية';
-    });
+// تتجه الشخصية إلى جهة الحركة عند تغيير الاتجاه.
+yaw=Math.atan2(-dx,-dz);
+player.rotation.y=yaw;
+}
 
-    function resize() {
-      const width = canvas.clientWidth;
-      const height = canvas.clientHeight;
-      renderer.setSize(width, height, false);
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-    }
+if(firstPerson){
+camera.position.set(
+player.position.x,
+player.position.y+1.8,
+player.position.z
+);
+camera.rotation.set(0,yaw+Math.PI,0);
+}else{
+const distance=7;
+const targetX=player.position.x+Math.sin(yaw)*distance;
+const targetZ=player.position.z+Math.cos(yaw)*distance;
 
-    window.addEventListener('resize', resize);
-    resize();
+camera.position.set(
+targetX,
+player.position.y+4,
+targetZ
+);
+camera.lookAt(
+player.position.x,
+player.position.y+1,
+player.position.z
+);
+}
 
-    status.textContent = 'العالم جاهز! تحرك باستخدام WASD.';
-
-    function animate() {
-      requestAnimationFrame(animate);
-
-      let forward = 0;
-      let sideways = 0;
-
-      if (keys['w'] || keys['arrowup']) forward += 1;
-      if (keys['s'] || keys['arrowdown']) forward -= 1;
-      if (keys['d'] || keys['arrowright']) sideways += 1;
-      if (keys['a'] || keys['arrowleft']) sideways -= 1;
-
-      if (forward !== 0 || sideways !== 0) {
-        const length = Math.hypot(forward, sideways);
-        forward /= length;
-        sideways /= length;
-
-        const speed = 0.12;
-        const dx = sideways * Math.cos(yaw) -
-                   forward * Math.sin(yaw);
-        const dz = sideways * Math.sin(yaw) +
-                   forward * Math.cos(yaw);
-
-        player.position.x += dx * speed;
-        player.position.z += dz * speed;
-
-        yaw = Math.atan2(-dx, -dz);
-        player.rotation.y = yaw;
-      }
-
-      if (firstPerson) {
-        camera.position.set(
-          player.position.x,
-          player.position.y + 1.8,
-          player.position.z
-        );
-        camera.rotation.set(0, yaw + Math.PI, 0);
-      } else {
-        const distance = 7;
-        camera.position.set(
-          player.position.x + Math.sin(yaw) * distance,
-          player.position.y + 4,
-          player.position.z + Math.cos(yaw) * distance
-        );
-        camera.lookAt(
-          player.position.x,
-          player.position.y + 1,
-          player.position.z
-        );
-      }
-
-      renderer.render(scene, camera);
-    }
-
-    animate();
-  </script>
+renderer.render(scene,camera);
+}
+animate();
+</script>
 </body>
 </html>
