@@ -149,7 +149,31 @@ if(keys['d']||keys['arrowright']) sideways+=1;
 if(keys['a']||keys['arrowleft']) sideways-=1;
 
 
+
 if (forward !== 0 || sideways !== 0) {
+  const length = Math.hypot(forward, sideways);
+  forward /= length;
+  sideways /= length;
+
+  // اتجاه الحركة ثابت بالنسبة للعالم
+  const dx = sideways;
+  const dz = -forward;
+
+  player.position.x += dx * speed * delta;
+  player.position.z += dz * speed * delta;
+
+  // تدوير الشخصية باتجاه الحركة فقط
+  const targetYaw = Math.atan2(-dx, -dz);
+  let angleDiff = targetYaw - yaw;
+
+  angleDiff = Math.atan2(
+    Math.sin(angleDiff),
+    Math.cos(angleDiff)
+  );
+
+  yaw += angleDiff * Math.min(1, 8 * delta);
+  player.rotation.y = yaw;
+}
   const length = Math.hypot(forward, sideways);
   forward /= length;
   sideways /= length;
